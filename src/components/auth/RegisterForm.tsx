@@ -6,7 +6,7 @@ import { Input } from "../ui/Input";
 import Button from "../ui/Button";
 
 export default function RegisterForm() {
-  const { register: registerUser, enterDemo, loading, error } = useAuth();
+  const { register: registerUser, loading, error } = useAuth();
   const {
     register,
     handleSubmit,
@@ -21,22 +21,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        const name = watch("name")?.trim() ?? "";
-        const email = watch("email")?.trim() ?? "";
-        const pass = watch("password")?.trim() ?? "";
-        const confirm = watch("confirmPassword")?.trim() ?? "";
-        if (!name && !email && !pass && !confirm) {
-          enterDemo();
-          return;
-        }
-        void handleSubmit(onSubmit)();
-      }}
-      className="space-y-5"
-      noValidate
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
       {error && (
         <div className="bg-wine-50 border border-wine-100 text-wine-600 rounded-2xl px-4 py-3 text-sm">
           {error}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DEMO_TOKEN, DEMO_USER, isDemoToken, useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../store/authStore';
 import authService from '../services/authService';
 
 /**
@@ -50,14 +50,6 @@ export function useAuth() {
   };
 
   /**
-   * Entra sin API ni validación — solo para probar la UI.
-   */
-  const enterDemo = () => {
-    setAuth(DEMO_TOKEN, DEMO_USER);
-    navigate('/dashboard');
-  };
-
-  /**
    * Cierra la sesión y redirige al home
    */
   const logout = () => {
@@ -69,7 +61,6 @@ export function useAuth() {
    * Recarga el perfil del usuario (para actualizar contadores)
    */
   const refreshUser = async () => {
-    if (isDemoToken(useAuthStore.getState().token)) return;
     try {
       const updatedUser = await authService.getMe();
       updateUser(updatedUser);
@@ -102,7 +93,6 @@ export function useAuth() {
     error,
     register,
     login,
-    enterDemo,
     logout,
     refreshUser,
     upgradePlan,
