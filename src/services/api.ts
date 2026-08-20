@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '../store/authStore';
+import { isDemoToken, useAuthStore } from '../store/authStore';
 
 /**
  * Instancia base de Axios configurada para la API de CVMatch.
@@ -26,7 +26,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // Si el servidor responde 401, cerrar sesión y redirigir al login
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 && !isDemoToken(useAuthStore.getState().token)) {
       useAuthStore.getState().logout();
       window.location.href = '/login';
     }

@@ -2,6 +2,23 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User } from '../types';
 
+/** Sesión local de prueba: no llama al backend. */
+export const DEMO_TOKEN = 'demo-local';
+
+export const DEMO_USER: User = {
+  id: 0,
+  name: 'Demo',
+  email: 'demo@local',
+  plan: 'pro',
+  analysisUsedThisMonth: 0,
+  analysisLimit: -1,
+  createdAt: new Date().toISOString(),
+};
+
+export function isDemoToken(token: string | null | undefined): boolean {
+  return token === DEMO_TOKEN;
+}
+
 interface AuthState {
   token: string | null;
   user: User | null;

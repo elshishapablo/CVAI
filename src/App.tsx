@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { useAuthStore } from "./store/authStore";
+import { DEMO_USER, isDemoToken, useAuthStore } from "./store/authStore";
 import authService from "./services/authService";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
@@ -30,6 +30,10 @@ function AppContent() {
 
   useEffect(() => {
     if (!token) return;
+    if (isDemoToken(token)) {
+      setAuth(token, DEMO_USER);
+      return;
+    }
     authService
       .getMe()
       .then((user) => setAuth(token, user))

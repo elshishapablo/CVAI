@@ -6,10 +6,11 @@ import { Input } from "../ui/Input";
 import Button from "../ui/Button";
 
 export default function LoginForm() {
-  const { login, loading, error } = useAuth();
+  const { login, enterDemo, loading, error } = useAuth();
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<LoginFormData>();
 
@@ -18,7 +19,20 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const email = watch("email")?.trim() ?? "";
+        const password = watch("password")?.trim() ?? "";
+        if (!email && !password) {
+          enterDemo();
+          return;
+        }
+        void handleSubmit(onSubmit)();
+      }}
+      className="space-y-5"
+      noValidate
+    >
       {error && (
         <div className="bg-wine-50 border border-wine-100 text-wine-600 rounded-2xl px-4 py-3 text-sm">
           {error}
