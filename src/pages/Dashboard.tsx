@@ -1,14 +1,15 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
-import { useAnalysis } from '../hooks/useAnalysis';
-import ResultCard from '../components/analysis/ResultCard';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-import Spinner from '../components/ui/Spinner';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import { useAnalysis } from "../hooks/useAnalysis";
+import ResultCard from "../components/analysis/ResultCard";
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+import Spinner from "../components/ui/Spinner";
+import { IconArrow, IconDoc, IconPlus, IconRefresh, IconStar } from "../components/ui/icons";
 
 export default function Dashboard() {
-  const { user }           = useAuthStore();
+  const { user } = useAuthStore();
   const { history, loadHistory, reloadHistory, deleteAnalysis, loading } = useAnalysis();
 
   useEffect(() => {
@@ -17,101 +18,113 @@ export default function Dashboard() {
 
   if (!user) return null;
 
-  const isFreePlan   = user.plan === 'free';
-  const usedCount    = user.analysisUsedThisMonth;
+  const isFreePlan = user.plan === "free";
+  const usedCount = user.analysisUsedThisMonth;
   const limitReached = isFreePlan && usedCount >= 3;
-
-  // Mostrar solo los últimos 5 en el dashboard
   const recentAnalyses = history.slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4 py-10">
-
-        {/* ── HEADER ──────────────────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+    <div className="relative px-4 py-12">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Hola, {user.name.split(' ')[0]} 👋
+            <p className="text-[11px] tracking-[0.2em] uppercase text-gold-700 mb-2">
+              Panel
+            </p>
+            <h1 className="font-display text-4xl text-ink">
+              Hola, {user.name.split(" ")[0]}.
             </h1>
-            <p className="text-gray-500 mt-1">Tu panel de control de CVMatch AI</p>
+            <p className="text-ink-500 mt-1">Tu taller de CVs, listo para la siguiente oferta.</p>
           </div>
           <Link to="/analysis/new">
-            <Button size="lg" className="shadow-md shadow-blue-200">
-              + Nuevo análisis
+            <Button size="lg">
+              <IconPlus className="w-4 h-4" />
+              Nuevo análisis
             </Button>
           </Link>
         </div>
 
-        {/* ── STATS ───────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <Card>
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Plan actual</p>
-            <p className="text-2xl font-bold text-gray-900">
-              {isFreePlan ? '🆓 Gratuito' : '⭐ Pro'}
+            <p className="text-[11px] tracking-[0.16em] uppercase text-ink-400 mb-2">Plan</p>
+            <p className="font-display text-2xl text-ink flex items-center gap-2">
+              {isFreePlan ? (
+                "Gratuito"
+              ) : (
+                <>
+                  <IconStar className="w-5 h-5 text-gold-500" /> Pro
+                </>
+              )}
             </p>
           </Card>
 
           <Card>
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Análisis este mes</p>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-[11px] tracking-[0.16em] uppercase text-ink-400 mb-2">
+              Este mes
+            </p>
+            <p className="font-display text-2xl text-ink">
               {usedCount}
-              {isFreePlan
-                ? <span className="text-gray-400 text-lg">/3</span>
-                : <span className="text-blue-400 text-lg"> ∞</span>
-              }
+              {isFreePlan ? (
+                <span className="text-ink-400 text-lg"> / 3</span>
+              ) : (
+                <span className="text-sage-600 text-lg"> · ∞</span>
+              )}
             </p>
             {isFreePlan && (
-              <div className="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div className="mt-3 h-1.5 bg-ink/5 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-blue-500 rounded-full transition-all"
-                  style={{ width: `${(usedCount / 3) * 100}%` }}
+                  className="h-full rounded-full bg-gradient-to-r from-sage-700 to-gold-400 transition-all duration-700"
+                  style={{ width: `${Math.min((usedCount / 3) * 100, 100)}%` }}
                 />
               </div>
             )}
           </Card>
 
           <Card>
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Total de análisis</p>
-            <p className="text-2xl font-bold text-gray-900">{history.length}</p>
+            <p className="text-[11px] tracking-[0.16em] uppercase text-ink-400 mb-2">Total</p>
+            <p className="font-display text-2xl text-ink">{history.length}</p>
           </Card>
         </div>
 
-        {/* ── BANNER UPGRADE ──────────────────────────────────────── */}
         {isFreePlan && (
-          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 mb-8 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="font-bold text-lg mb-1">
-                {limitReached ? '⚠️ Has llegado a tu límite mensual' : '🚀 Actualiza a Pro por $7/mes'}
+          <div className="relative overflow-hidden rounded-[1.5rem] bg-ink text-paper p-6 mb-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="orb w-48 h-48 bg-gold-400/20 -right-8 -top-10" />
+            <div className="relative">
+              <p className="font-display text-xl mb-1">
+                {limitReached ? "Has llegado al límite mensual" : "Pasa a Pro — $7/mes"}
               </p>
-              <p className="text-blue-100 text-sm">
+              <p className="text-paper/55 text-sm">
                 {limitReached
-                  ? 'Actualiza a Pro para seguir analizando CVs sin límite.'
-                  : 'Análisis ilimitados, historial completo y carta de presentación con IA.'}
+                  ? "Actualiza a Pro para seguir analizando CVs sin techo."
+                  : "Análisis ilimitados, historial completo y carta con IA."}
               </p>
             </div>
-            <Link to="/pricing">
-              <Button variant="secondary" className="whitespace-nowrap">
-                Ver planes →
+            <Link to="/pricing" className="relative shrink-0">
+              <Button variant="secondary">
+                Ver planes
+                <IconArrow className="w-4 h-4" />
               </Button>
             </Link>
           </div>
         )}
 
-        {/* ── ANÁLISIS RECIENTES ──────────────────────────────────── */}
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">Análisis recientes</h2>
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-display text-2xl text-ink">Recientes</h2>
             <div className="flex items-center gap-3">
               <button
                 onClick={reloadHistory}
-                className="text-sm text-gray-400 hover:text-blue-500 transition-colors"
+                className="inline-flex items-center gap-1.5 text-[13px] text-ink-400 hover:text-ink transition-colors"
               >
-                ↺ Actualizar
+                <IconRefresh className="w-4 h-4" />
+                Actualizar
               </button>
               {history.length > 5 && (
-                <Link to="/history" className="text-sm text-blue-500 hover:underline font-medium">
-                  Ver historial completo →
+                <Link
+                  to="/history"
+                  className="text-[13px] text-gold-700 hover:underline font-medium"
+                >
+                  Ver todo
                 </Link>
               )}
             </div>
@@ -122,10 +135,14 @@ export default function Dashboard() {
               <Spinner size="lg" />
             </div>
           ) : recentAnalyses.length === 0 ? (
-            <div className="border-2 border-dashed border-gray-200 rounded-2xl p-16 text-center">
-              <div className="text-5xl mb-4">📄</div>
-              <p className="font-semibold text-gray-600 mb-1">Aún no tienes análisis</p>
-              <p className="text-sm text-gray-400 mb-6">Sube tu CV y compáralo con una oferta de trabajo</p>
+            <div className="border border-dashed border-ink/15 rounded-[1.6rem] p-16 text-center bg-white/40">
+              <span className="mx-auto mb-4 w-12 h-12 rounded-2xl bg-ink text-gold-300 grid place-items-center">
+                <IconDoc className="w-5 h-5" />
+              </span>
+              <p className="font-display text-xl text-ink mb-1">Aún no hay análisis</p>
+              <p className="text-sm text-ink-400 mb-6">
+                Sube tu CV y confrontalo con una oferta.
+              </p>
               <Link to="/analysis/new">
                 <Button>Hacer mi primer análisis</Button>
               </Link>
@@ -133,11 +150,7 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-3">
               {recentAnalyses.map((a) => (
-                <ResultCard
-                  key={a.id}
-                  analysis={a}
-                  onDelete={deleteAnalysis}
-                />
+                <ResultCard key={a.id} analysis={a} onDelete={deleteAnalysis} />
               ))}
             </div>
           )}

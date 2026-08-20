@@ -1,27 +1,24 @@
-import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useAuthStore } from './store/authStore';
-import authService from './services/authService';
-import Navbar from './components/layout/Navbar';
-import Footer from './components/layout/Footer';
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { useAuthStore } from "./store/authStore";
+import authService from "./services/authService";
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
 
-// Páginas
-import Home           from './pages/Home';
-import Login          from './pages/Login';
-import Register       from './pages/Register';
-import Dashboard      from './pages/Dashboard';
-import NewAnalysis    from './pages/NewAnalysis';
-import AnalysisResult from './pages/AnalysisResult';
-import History        from './pages/History';
-import Pricing        from './pages/Pricing';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import NewAnalysis from "./pages/NewAnalysis";
+import AnalysisResult from "./pages/AnalysisResult";
+import History from "./pages/History";
+import Pricing from "./pages/Pricing";
 
-// ─── Ruta protegida: redirige al login si no está autenticado ──────
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
 }
 
-// ─── Ruta pública: redirige al dashboard si ya está autenticado ────
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
   return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" replace />;
@@ -31,38 +28,40 @@ function AppContent() {
   const { token, setAuth, logout } = useAuthStore();
   const location = useLocation();
 
-  // Al cargar la app, verificar que el token guardado sigue siendo válido
   useEffect(() => {
     if (!token) return;
-    authService.getMe()
+    authService
+      .getMe()
       .then((user) => setAuth(token, user))
       .catch(() => logout());
   }, []);
 
-  // En login/register no mostramos navbar ni footer
-  const isAuthPage = ['/login', '/register'].includes(location.pathname);
+  const isAuthPage = ["/login", "/register"].includes(location.pathname);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="relative flex flex-col min-h-screen bg-paper text-ink overflow-x-hidden">
+      <div className="grain" />
+      <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
+        <div className="orb w-[28rem] h-[28rem] bg-gold-300/25 -top-32 -left-24 animate-drift" />
+        <div className="orb w-[32rem] h-[32rem] bg-sage-300/20 top-1/3 -right-40 animate-pulse-soft" />
+        <div className="orb w-72 h-72 bg-gold-200/20 bottom-0 left-1/3 animate-drift" />
+      </div>
+
       {!isAuthPage && <Navbar />}
 
-      <main className="flex-1">
+      <main className="relative flex-1">
         <Routes>
-          {/* Públicas */}
-          <Route path="/"        element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/pricing" element={<Pricing />} />
 
-          {/* Solo para no autenticados */}
-          <Route path="/login"    element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 
-          {/* Protegidas */}
-          <Route path="/dashboard"      element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/analysis/new"   element={<ProtectedRoute><NewAnalysis /></ProtectedRoute>} />
-          <Route path="/analysis/:id"   element={<ProtectedRoute><AnalysisResult /></ProtectedRoute>} />
-          <Route path="/history"        element={<ProtectedRoute><History /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/analysis/new" element={<ProtectedRoute><NewAnalysis /></ProtectedRoute>} />
+          <Route path="/analysis/:id" element={<ProtectedRoute><AnalysisResult /></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
 
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

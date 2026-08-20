@@ -1,17 +1,18 @@
-import { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { useForm } from 'react-hook-form';
-import { useAuthStore } from '../../store/authStore';
-import { useAnalysis } from '../../hooks/useAnalysis';
-import type { NewAnalysisFormData } from '../../types';
-import { Input, Textarea } from '../ui/Input';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
-import { Link } from 'react-router-dom';
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { useAuthStore } from "../../store/authStore";
+import { useAnalysis } from "../../hooks/useAnalysis";
+import type { NewAnalysisFormData } from "../../types";
+import { Input, Textarea } from "../ui/Input";
+import Button from "../ui/Button";
+import Card from "../ui/Card";
+import { Link } from "react-router-dom";
+import { IconCheck, IconSpark, IconUpload } from "../ui/icons";
 
 export default function UploadForm() {
-  const [cvFile, setCvFile]     = useState<File | null>(null);
-  const { user }                = useAuthStore();
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const { user } = useAuthStore();
   const { createAnalysis, isAnalyzing, error, clearError } = useAnalysis();
 
   const {
@@ -20,21 +21,23 @@ export default function UploadForm() {
     formState: { errors },
   } = useForm<NewAnalysisFormData>();
 
-  // Configurar el dropzone — solo acepta PDF, máx 10 MB
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles[0]) {
-      setCvFile(acceptedFiles[0]);
-      clearError();
-    }
-  }, [clearError]);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles[0]) {
+        setCvFile(acceptedFiles[0]);
+        clearError();
+      }
+    },
+    [clearError],
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept:   { 'application/pdf': ['.pdf'] },
-    maxSize:  10 * 1024 * 1024,
+    accept: { "application/pdf": [".pdf"] },
+    maxSize: 10 * 1024 * 1024,
     multiple: false,
     onDropRejected: () => {
-      alert('Solo se aceptan archivos PDF de máximo 10 MB.');
+      alert("Solo se aceptan archivos PDF de máximo 10 MB.");
     },
   });
 
@@ -43,79 +46,85 @@ export default function UploadForm() {
     createAnalysis(cvFile, data.jobTitle, data.jobDescription, data.company);
   };
 
-  // Verificar límite del plan
   const isLimitReached =
-    user?.plan === 'free' && (user?.analysisUsedThisMonth ?? 0) >= 3;
+    user?.plan === "free" && (user?.analysisUsedThisMonth ?? 0) >= 3;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-
-      {/* Límite alcanzado */}
       {isLimitReached && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-          <p className="font-bold text-amber-800 mb-1">Límite mensual alcanzado</p>
-          <p className="text-sm text-amber-700 mb-3">
+        <div className="bg-gold-50 border border-gold-200 rounded-[1.4rem] p-5">
+          <p className="font-display text-lg text-gold-800 mb-1">Límite mensual alcanzado</p>
+          <p className="text-sm text-gold-700 mb-3">
             Has usado los 3 análisis gratuitos de este mes.
           </p>
           <Link to="/pricing">
-            <Button variant="primary" size="sm">Actualizar a Pro →</Button>
+            <Button variant="primary" size="sm">
+              Actualizar a Pro
+            </Button>
           </Link>
         </div>
       )}
 
-      {/* Error global */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm">
+        <div className="bg-wine-50 border border-wine-100 text-wine-600 rounded-2xl px-4 py-3 text-sm">
           {error}
         </div>
       )}
 
-      {/* ── STEP 1: Subir PDF ── */}
       <Card>
-        <h2 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+        <h2 className="font-display text-lg text-ink mb-4 flex items-center gap-3">
+          <span className="w-7 h-7 bg-ink text-gold-300 rounded-full grid place-items-center text-[11px] font-semibold">
+            1
+          </span>
           Sube tu CV en PDF
         </h2>
 
         <div
           {...getRootProps()}
           className={[
-            'border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all',
+            "border border-dashed rounded-[1.3rem] p-10 text-center cursor-pointer transition-all duration-300",
             isDragActive
-              ? 'border-blue-500 bg-blue-50'
+              ? "border-gold-500 bg-gold-50 scale-[1.01]"
               : cvFile
-              ? 'border-green-400 bg-green-50'
-              : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50/40',
-          ].join(' ')}
+                ? "border-sage-400 bg-sage-50"
+                : "border-ink/20 hover:border-gold-500 hover:bg-gold-50/40",
+          ].join(" ")}
         >
           <input {...getInputProps()} />
 
           {cvFile ? (
             <>
-              <div className="text-4xl mb-3">✅</div>
-              <p className="font-semibold text-green-700">{cvFile.name}</p>
-              <p className="text-xs text-gray-400 mt-1">
+              <span className="mx-auto mb-3 w-12 h-12 rounded-2xl bg-sage-700 text-paper grid place-items-center">
+                <IconCheck className="w-5 h-5" />
+              </span>
+              <p className="font-medium text-sage-800">{cvFile.name}</p>
+              <p className="text-xs text-ink-400 mt-1">
                 {(cvFile.size / 1024).toFixed(0)} KB · Haz clic para cambiar
               </p>
             </>
           ) : (
             <>
-              <div className="text-4xl mb-3">📄</div>
-              <p className="font-semibold text-gray-700">
-                {isDragActive ? 'Suelta el PDF aquí' : 'Arrastra tu CV aquí'}
+              <span className="mx-auto mb-3 w-12 h-12 rounded-2xl bg-ink text-gold-300 grid place-items-center">
+                <IconUpload className="w-5 h-5" />
+              </span>
+              <p className="font-medium text-ink">
+                {isDragActive ? "Suelta el PDF aquí" : "Arrastra tu CV aquí"}
               </p>
-              <p className="text-sm text-gray-400 mt-1">o haz clic para seleccionar</p>
-              <p className="text-xs text-gray-300 mt-2">Solo PDF · Máximo 10 MB</p>
+              <p className="text-sm text-ink-400 mt-1">o haz clic para seleccionar</p>
+              <p className="text-[11px] tracking-wide uppercase text-ink-400 mt-3">
+                Solo PDF · Máximo 10 MB
+              </p>
             </>
           )}
         </div>
       </Card>
 
-      {/* ── STEP 2: Datos del trabajo ── */}
       <Card>
-        <h2 className="font-bold text-gray-900 mb-5 flex items-center gap-2">
-          <span className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
-          Datos de la oferta de trabajo
+        <h2 className="font-display text-lg text-ink mb-5 flex items-center gap-3">
+          <span className="w-7 h-7 bg-ink text-gold-300 rounded-full grid place-items-center text-[11px] font-semibold">
+            2
+          </span>
+          Datos de la oferta
         </h2>
 
         <div className="space-y-4">
@@ -124,12 +133,12 @@ export default function UploadForm() {
               label="Título del cargo *"
               placeholder="ej: Senior Frontend Developer"
               error={errors.jobTitle?.message}
-              {...register('jobTitle', { required: 'El título es obligatorio' })}
+              {...register("jobTitle", { required: "El título es obligatorio" })}
             />
             <Input
               label="Empresa (opcional)"
               placeholder="ej: Google, Startup X..."
-              {...register('company')}
+              {...register("company")}
             />
           </div>
 
@@ -139,15 +148,14 @@ export default function UploadForm() {
             placeholder="Pega aquí la descripción completa de la oferta: responsabilidades, requisitos, tecnologías, beneficios..."
             error={errors.jobDescription?.message}
             hint="Cuanto más detallada sea la descripción, más preciso será el análisis."
-            {...register('jobDescription', {
-              required:  'La descripción es obligatoria',
-              minLength: { value: 50, message: 'Añade más detalle (mínimo 50 caracteres)' },
+            {...register("jobDescription", {
+              required: "La descripción es obligatoria",
+              minLength: { value: 50, message: "Añade más detalle (mínimo 50 caracteres)" },
             })}
           />
         </div>
       </Card>
 
-      {/* ── Botón analizar ── */}
       <Button
         type="submit"
         fullWidth
@@ -155,12 +163,19 @@ export default function UploadForm() {
         loading={isAnalyzing}
         disabled={!cvFile || isLimitReached}
       >
-        {isAnalyzing ? 'Analizando con IA...' : '🤖 Analizar compatibilidad'}
+        {isAnalyzing ? (
+          "Analizando con IA..."
+        ) : (
+          <>
+            <IconSpark className="w-4 h-4" />
+            Analizar compatibilidad
+          </>
+        )}
       </Button>
 
       {isAnalyzing && (
-        <p className="text-center text-sm text-gray-500 animate-pulse">
-          Analizando tu CV. Esto puede tardar entre 10 y 20 segundos...
+        <p className="text-center text-sm text-ink-400 animate-pulse">
+          Esto puede tardar entre 10 y 20 segundos...
         </p>
       )}
     </form>

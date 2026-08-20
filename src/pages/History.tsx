@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAnalysis } from '../hooks/useAnalysis';
-import ResultCard from '../components/analysis/ResultCard';
-import Button from '../components/ui/Button';
-import Spinner from '../components/ui/Spinner';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useAnalysis } from "../hooks/useAnalysis";
+import ResultCard from "../components/analysis/ResultCard";
+import Button from "../components/ui/Button";
+import Spinner from "../components/ui/Spinner";
+import { IconArrow, IconDoc, IconPlus } from "../components/ui/icons";
 
 export default function History() {
   const { history, reloadHistory, deleteAnalysis, loading } = useAnalysis();
@@ -13,37 +14,45 @@ export default function History() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="relative px-4 py-12">
       <div className="max-w-4xl mx-auto">
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
           <div>
-            <Link to="/dashboard" className="text-sm text-blue-500 hover:underline mb-2 inline-block">
-              ← Volver al dashboard
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-2 text-sm text-ink-400 hover:text-ink mb-4 transition-colors"
+            >
+              <span className="rotate-180 inline-flex">
+                <IconArrow className="w-4 h-4" />
+              </span>
+              Dashboard
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900">Historial de análisis</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="font-display text-4xl text-ink">Historial</h1>
+            <p className="text-ink-500 mt-1">
               {history.length > 0
                 ? `${history.length} análisis realizados`
-                : 'Aún no tienes análisis'}
+                : "Aún no tienes análisis"}
             </p>
           </div>
           <Link to="/analysis/new">
-            <Button>+ Nuevo análisis</Button>
+            <Button>
+              <IconPlus className="w-4 h-4" />
+              Nuevo análisis
+            </Button>
           </Link>
         </div>
 
-        {/* Lista */}
         {loading ? (
           <div className="flex justify-center py-16">
             <Spinner size="lg" />
           </div>
         ) : history.length === 0 ? (
-          <div className="border-2 border-dashed border-gray-200 rounded-2xl p-16 text-center bg-white">
-            <div className="text-5xl mb-4">📋</div>
-            <p className="font-semibold text-gray-600 mb-1">No tienes análisis todavía</p>
-            <p className="text-sm text-gray-400 mb-6">Empieza subiendo tu CV</p>
+          <div className="border border-dashed border-ink/15 rounded-[1.6rem] p-16 text-center bg-white/40">
+            <span className="mx-auto mb-4 w-12 h-12 rounded-2xl bg-ink text-gold-300 grid place-items-center">
+              <IconDoc className="w-5 h-5" />
+            </span>
+            <p className="font-display text-xl text-ink mb-1">Vacío, por ahora</p>
+            <p className="text-sm text-ink-400 mb-6">Empieza subiendo tu CV</p>
             <Link to="/analysis/new">
               <Button>Hacer mi primer análisis</Button>
             </Link>
@@ -51,11 +60,7 @@ export default function History() {
         ) : (
           <div className="space-y-3">
             {history.map((a) => (
-              <ResultCard
-                key={a.id}
-                analysis={a}
-                onDelete={deleteAnalysis}
-              />
+              <ResultCard key={a.id} analysis={a} onDelete={deleteAnalysis} />
             ))}
           </div>
         )}

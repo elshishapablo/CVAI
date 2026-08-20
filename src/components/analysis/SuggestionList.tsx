@@ -1,4 +1,4 @@
-import type { SuggestionItem } from '../../types';
+import type { SuggestionItem } from "../../types";
 
 interface SuggestionListProps {
   suggestions: SuggestionItem[];
@@ -6,7 +6,7 @@ interface SuggestionListProps {
 
 export default function SuggestionList({ suggestions }: SuggestionListProps) {
   if (!suggestions.length) {
-    return <p className="text-sm text-gray-400">No hay sugerencias disponibles.</p>;
+    return <p className="text-sm text-ink-400">No hay sugerencias disponibles.</p>;
   }
 
   return (
@@ -14,31 +14,27 @@ export default function SuggestionList({ suggestions }: SuggestionListProps) {
       {suggestions.map((s, i) => (
         <div
           key={i}
-          className="rounded-xl border border-gray-200 overflow-hidden"
+          className="rounded-[1.2rem] border border-ink/10 overflow-hidden bg-white/50"
         >
-          {/* Header de la sección */}
-          <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
+          <div className="bg-ink px-4 py-2.5">
+            <span className="text-[11px] tracking-[0.16em] uppercase text-gold-300">
               {s.section}
             </span>
           </div>
 
-          {/* Original vs Mejorado */}
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200">
-            {/* Original */}
-            <div className="p-4">
-              <p className="text-xs font-semibold text-red-500 mb-2 flex items-center gap-1">
-                <span>✗</span> Como tienes ahora
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-ink/10">
+            <div className="p-4 bg-wine-50/40">
+              <p className="text-[11px] tracking-[0.14em] uppercase text-wine-600 mb-2">
+                Ahora
               </p>
-              <p className="text-sm text-gray-600 leading-relaxed">{s.original}</p>
+              <p className="text-sm text-ink-600 leading-relaxed">{s.original}</p>
             </div>
 
-            {/* Mejorado */}
-            <div className="p-4 bg-green-50/50">
-              <p className="text-xs font-semibold text-green-600 mb-2 flex items-center gap-1">
-                <span>✓</span> Versión mejorada (lista para copiar)
+            <div className="p-4 bg-sage-50/60">
+              <p className="text-[11px] tracking-[0.14em] uppercase text-sage-700 mb-2">
+                Versión mejorada
               </p>
-              <p className="text-sm text-gray-700 leading-relaxed font-medium">{s.improved}</p>
+              <p className="text-sm text-ink leading-relaxed">{s.improved}</p>
             </div>
           </div>
         </div>

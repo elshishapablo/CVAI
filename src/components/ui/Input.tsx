@@ -1,55 +1,60 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?:    string;
-  error?:    string;
-  hint?:     string;
+  label?: string;
+  error?: string;
+  hint?: string;
 }
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
-  hint?:  string;
+  hint?: string;
 }
 
 const baseClasses = [
-  'w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900',
-  'placeholder:text-gray-400',
-  'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-  'transition duration-150',
-  'disabled:bg-gray-50 disabled:text-gray-400',
-].join(' ');
+  "w-full rounded-2xl border border-ink/10 bg-white/70 px-4 py-3 text-sm text-ink",
+  "placeholder:text-ink-400/70",
+  "shadow-inset backdrop-blur-sm",
+  "focus:outline-none focus:ring-2 focus:ring-gold-400/70 focus:border-gold-400/40",
+  "transition duration-300",
+  "disabled:bg-paper-100 disabled:text-ink-400",
+].join(" ");
 
-const errorClasses = 'border-red-400 focus:ring-red-400';
+const errorClasses = "border-wine-500/50 focus:ring-wine-500/40";
 
-export function Input({ label, error, hint, className = '', ...props }: InputProps) {
+export function Input({ label, error, hint, className = "", ...props }: InputProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-sm font-semibold text-gray-700">{label}</label>
+        <label className="text-[13px] font-medium text-ink-600 tracking-wide">
+          {label}
+        </label>
       )}
       <input
-        className={`${baseClasses} ${error ? errorClasses : ''} ${className}`}
+        className={`${baseClasses} ${error ? errorClasses : ""} ${className}`}
         {...props}
       />
-      {error && <p className="text-xs text-red-500">{error}</p>}
-      {hint && !error && <p className="text-xs text-gray-400">{hint}</p>}
+      {error && <p className="text-xs text-wine-600">{error}</p>}
+      {hint && !error && <p className="text-xs text-ink-400">{hint}</p>}
     </div>
   );
 }
 
-export function Textarea({ label, error, hint, className = '', ...props }: TextareaProps) {
+export function Textarea({ label, error, hint, className = "", ...props }: TextareaProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-sm font-semibold text-gray-700">{label}</label>
+        <label className="text-[13px] font-medium text-ink-600 tracking-wide">
+          {label}
+        </label>
       )}
       <textarea
-        className={`${baseClasses} resize-none ${error ? errorClasses : ''} ${className}`}
+        className={`${baseClasses} resize-none ${error ? errorClasses : ""} ${className}`}
         {...props}
       />
-      {error && <p className="text-xs text-red-500">{error}</p>}
-      {hint && !error && <p className="text-xs text-gray-400">{hint}</p>}
+      {error && <p className="text-xs text-wine-600">{error}</p>}
+      {hint && !error && <p className="text-xs text-ink-400">{hint}</p>}
     </div>
   );
 }

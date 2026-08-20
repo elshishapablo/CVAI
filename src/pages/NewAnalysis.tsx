@@ -1,23 +1,26 @@
-import { Link } from 'react-router-dom';
-import UploadForm from '../components/analysis/UploadForm';
+import { Link } from "react-router-dom";
+import UploadForm from "../components/analysis/UploadForm";
+import { IconArrow } from "../components/ui/icons";
 
 export default function NewAnalysis() {
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4">
+    <div className="relative px-4 py-12">
       <div className="max-w-2xl mx-auto">
-        {/* Breadcrumb */}
-        <div className="mb-6">
-          <Link to="/dashboard" className="text-sm text-blue-500 hover:underline">
-            ← Volver al dashboard
-          </Link>
-        </div>
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-2 text-sm text-ink-400 hover:text-ink mb-8 transition-colors"
+        >
+          <span className="rotate-180 inline-flex">
+            <IconArrow className="w-4 h-4" />
+          </span>
+          Dashboard
+        </Link>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Nuevo análisis</h1>
-          <p className="text-gray-500 mt-1">
-            Sube tu CV en PDF y pega la oferta de trabajo para obtener tu análisis de compatibilidad.
-          </p>
-        </div>
+        <p className="text-[11px] tracking-[0.2em] uppercase text-gold-700 mb-2">Nuevo</p>
+        <h1 className="font-display text-4xl text-ink mb-2">Análisis</h1>
+        <p className="text-ink-500 mb-10">
+          Sube el PDF y pega la oferta. El diagnóstico llega en menos de un minuto.
+        </p>
 
         <UploadForm />
       </div>

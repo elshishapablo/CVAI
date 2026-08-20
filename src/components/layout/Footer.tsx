@@ -1,26 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import Logo from "./Logo";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 border-t border-gray-200 mt-auto">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-xs">CV</span>
-            </div>
-            <span className="font-bold text-gray-700 text-sm">
-              CVMatch <span className="text-blue-500">AI</span>
-            </span>
+    <footer className="mt-auto border-t border-ink/10 bg-ink text-paper relative overflow-hidden">
+      <div className="orb w-64 h-64 bg-gold-500/15 -bottom-24 -left-10 animate-pulse-soft" />
+      <div className="orb w-72 h-72 bg-sage-500/10 -top-24 right-0 animate-drift" />
+
+      <div className="relative max-w-6xl mx-auto px-4 py-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <Logo inverted to="/" />
+
+          <div className="flex items-center gap-8 text-[13px] text-paper/60">
+            <Link to="/" className="hover:text-gold-300 transition-colors">
+              Inicio
+            </Link>
+            <Link to="/pricing" className="hover:text-gold-300 transition-colors">
+              Precios
+            </Link>
+            <Link to="/login" className="hover:text-gold-300 transition-colors">
+              Iniciar sesión
+            </Link>
           </div>
 
-          <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link to="/"       className="hover:text-blue-500 transition-colors">Inicio</Link>
-            <Link to="/pricing" className="hover:text-blue-500 transition-colors">Precios</Link>
-            <Link to="/login"  className="hover:text-blue-500 transition-colors">Iniciar sesión</Link>
-          </div>
-
-          <p className="text-xs text-gray-400">
+          <p className="text-[11px] tracking-wide uppercase text-paper/35">
             © {new Date().getFullYear()} CVMatch AI
           </p>
         </div>

@@ -1,27 +1,47 @@
-import { Link } from 'react-router-dom';
-import LoginForm from '../components/auth/LoginForm';
+import { Link } from "react-router-dom";
+import LoginForm from "../components/auth/LoginForm";
+import Logo from "../components/layout/Logo";
 
 export default function Login() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold">CV</span>
-            </div>
-            <span className="font-bold text-gray-900 text-xl">
-              CVMatch <span className="text-blue-500">AI</span>
-            </span>
-          </Link>
-          <h1 className="text-2xl font-bold text-gray-900">Bienvenido de vuelta</h1>
-          <p className="text-gray-500 mt-1 text-sm">Inicia sesión en tu cuenta</p>
+    <div className="min-h-screen grid lg:grid-cols-2">
+      <div className="relative hidden lg:flex flex-col justify-between bg-ink text-paper p-12 overflow-hidden">
+        <div className="orb w-80 h-80 bg-gold-500/20 -top-10 -left-10 animate-drift" />
+        <div className="orb w-96 h-96 bg-sage-500/15 bottom-0 right-0 animate-pulse-soft" />
+        <Logo inverted />
+        <div className="relative max-w-md">
+          <p className="font-display text-4xl leading-snug mb-6">
+            Vuelve a lo que estabas afinando.
+          </p>
+          <p className="text-paper/55 leading-relaxed">
+            Tu historial, tus scores y las reescrituras te esperan. Un CV no se
+            improvisa el día de la oferta.
+          </p>
         </div>
+        <p className="relative text-[11px] tracking-[0.18em] uppercase text-paper/30">
+          CVMatch AI
+        </p>
+      </div>
 
-        {/* Card del formulario */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-          <LoginForm />
+      <div className="flex items-center justify-center px-4 py-16">
+        <div className="w-full max-w-md animate-scale-in">
+          <div className="lg:hidden text-center mb-8">
+            <Logo />
+          </div>
+          <p className="text-[11px] tracking-[0.2em] uppercase text-gold-700 mb-3">
+            Acceso
+          </p>
+          <h1 className="font-display text-3xl text-ink mb-1">Bienvenido de vuelta</h1>
+          <p className="text-ink-500 text-sm mb-8">Inicia sesión en tu cuenta</p>
+
+          <div className="bg-white/70 border border-ink/10 rounded-[1.6rem] shadow-lift p-8 hairline">
+            <LoginForm />
+          </div>
+          <p className="text-center text-xs text-ink-400 mt-6">
+            <Link to="/" className="hover:text-ink transition-colors">
+              ← Volver al inicio
+            </Link>
+          </p>
         </div>
       </div>
     </div>

@@ -3,43 +3,42 @@ interface KeywordBadgesProps {
   missingKeywords: string[];
 }
 
-export default function KeywordBadges({ presentKeywords, missingKeywords }: KeywordBadgesProps) {
+export default function KeywordBadges({
+  presentKeywords,
+  missingKeywords,
+}: KeywordBadgesProps) {
   return (
-    <div className="space-y-6">
-      {/* Keywords encontradas */}
+    <div className="space-y-8">
       {presentKeywords.length > 0 && (
         <div>
-          <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-            <span className="text-green-500">✓</span>
-            Keywords encontradas en tu CV ({presentKeywords.length})
+          <h4 className="text-[11px] tracking-[0.16em] uppercase text-sage-700 mb-3">
+            En tu CV · {presentKeywords.length}
           </h4>
           <div className="flex flex-wrap gap-2">
             {presentKeywords.map((kw) => (
               <span
                 key={kw}
-                className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sage-50 text-sage-800 border border-sage-100"
               >
-                ✓ {kw}
+                {kw}
               </span>
             ))}
           </div>
         </div>
       )}
 
-      {/* Keywords faltantes */}
       {missingKeywords.length > 0 && (
         <div>
-          <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
-            <span className="text-red-500">✗</span>
-            Keywords que deberías incluir ({missingKeywords.length})
+          <h4 className="text-[11px] tracking-[0.16em] uppercase text-wine-600 mb-3">
+            Deberías incluir · {missingKeywords.length}
           </h4>
           <div className="flex flex-wrap gap-2">
             {missingKeywords.map((kw) => (
               <span
                 key={kw}
-                className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-600 border border-red-200"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-wine-50 text-wine-600 border border-wine-100"
               >
-                ✗ {kw}
+                {kw}
               </span>
             ))}
           </div>
@@ -47,7 +46,9 @@ export default function KeywordBadges({ presentKeywords, missingKeywords }: Keyw
       )}
 
       {presentKeywords.length === 0 && missingKeywords.length === 0 && (
-        <p className="text-sm text-gray-400">No se identificaron keywords en este análisis.</p>
+        <p className="text-sm text-ink-400">
+          No se identificaron keywords en este análisis.
+        </p>
       )}
     </div>
   );
